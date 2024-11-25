@@ -22,12 +22,12 @@ class MaterialeDidattico:
         """
         return list(self.materiali.find({}, {"_id": 0}).skip(skip).limit(limit))
 
-    def inserisci_materiale(self, nome, descrizione, file_path):
+    def inserisci_materiale(self, id_materiale, tipo, titolo, descrizione, file_path):
         """
         Inserisce un nuovo materiale didattico, salvandone il file sul file system e i metadati nel database.
         """
-        if not nome or not descrizione:
-            raise ValueError("Nome e descrizione sono obbligatori.")
+        if not titolo or not descrizione:
+            raise ValueError("Titolo e descrizione sono obbligatori.")
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Il file '{file_path}' non esiste.")
 
@@ -41,34 +41,40 @@ class MaterialeDidattico:
         except Exception as e:
             raise IOError(f"Errore durante il caricamento del file: {e}")
 
-        nuovo_materiale = {"nome": nome, "descrizione": descrizione, "file_path": upload_path}
+        nuovo_materiale = {
+            "ID_MaterialeDidattico": id_materiale,
+            "Tipo": tipo,
+            "Titolo": titolo,
+            "Descrizione": descrizione,
+            "File_Path": upload_path
+        }
         self.materiali.insert_one(nuovo_materiale)
 
-    def modifica_materiale(self, nome_corrente, nuovo_nome, nuova_descrizione):
+    def modifica_materiale(self, id_materiale_corrente, nuovo_titolo, nuova_descrizione):
         """
         Modifica i dati di un materiale didattico esistente.
         """
-        if not nuovo_nome or not nuova_descrizione:
-            raise ValueError("Il nuovo nome e la nuova descrizione sono obbligatori.")
+        if not nuovo_titolo or not nuova_descrizione:
+            raise ValueError("Il nuovo titolo e la nuova descrizione sono obbligatori.")
 
         result = self.materiali.update_one(
-            {"nome": nome_corrente},
-            {"$set": {"nome": nuovo_nome, "descrizione": nuova_descrizione}}
+            {"ID_MaterialeDidattico": id_materiale_corrente},
+            {"$set": {"Titolo": nuovo_titolo, "Descrizione": nuova_descrizione}}
         )
         return result.modified_count > 0
 
-    def rimuovi_materiale(self, nome):
+    def rimuovi_materiale(self, id_materiale):
         """
         Rimuove un materiale didattico sia dal database che dal file system.
         """
-        materiale = self.materiali.find_one({"nome": nome})
-        if materiale and "file_path" in materiale:
+        materiale = self.materiali.find_one({"ID_MaterialeDidattico": id_materiale})
+        if materiale and "File_Path" in materiale:
             try:
-                os.remove(materiale["file_path"])
+                os.remove(materiale["File_Path"])
             except FileNotFoundError:
-                print(f"Attenzione: Il file '{materiale['file_path']}' non esiste.")
+                print(f"Attenzione: Il file '{materiale['File_Path']}' non esiste.")
             except Exception as e:
                 print(f"Errore durante la rimozione del file: {e}")
 
-        result = self.materiali.delete_one({"nome": nome})
+        result = self.materiali.delete_one({"ID_MaterialeDidattico": id_materiale})
         return result.deleted_count > 0
