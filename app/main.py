@@ -1,4 +1,3 @@
-# main.py
 from app.controllers.MaterialeControl import MaterialeControl
 
 def main():

@@ -13,8 +13,14 @@ class MaterialeDidattico:
             os.makedirs(self.upload_folder)
 
     def __del__(self):
-        # Chiude la connessione al database quando l'oggetto viene distrutto
-        self.client.close()
+        """Chiude la connessione al database quando l'oggetto viene distrutto."""
+        self.close_connection()
+
+    def close_connection(self):
+        """Chiude la connessione al database."""
+        if self.client:
+            self.client.close()
+            print("Connessione al database chiusa")
 
     def visualizza_materiali(self, skip=0, limit=10):
         """

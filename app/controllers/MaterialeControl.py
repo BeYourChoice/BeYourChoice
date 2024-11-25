@@ -26,10 +26,13 @@ class MaterialeControl:
             print(f"Materiale '{titolo}' inserito con successo!")
         except FileNotFoundError as e:
             print(f"Errore: {e}")
+            raise
         except ValueError as e:
             print(f"Errore: {e}")
+            raise
         except IOError as e:
             print(f"Errore durante l'inserimento del materiale: {e}")
+            raise
 
     def modifica_materiale(self, id_materiale_corrente, nuovo_titolo, nuova_descrizione):
         """
@@ -43,6 +46,7 @@ class MaterialeControl:
                 print(f"Errore: Materiale con ID '{id_materiale_corrente}' non trovato o dati invariati.")
         except ValueError as e:
             print(f"Errore: {e}")
+            raise
 
     def rimuovi_materiale(self, id_materiale):
         """
