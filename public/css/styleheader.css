@@ -38,6 +38,7 @@ body {
 
 .logo img:hover {
     transform: scale(1.05); /* Un leggero ingrandimento al passaggio del mouse */
+    filter: drop-shadow( 0 0 10px rgba(215, 90, 61, 0.5));
 }
 
 .navigation {
@@ -62,13 +63,18 @@ body {
 }
 
 .nav-link i {
-    font-size: 22px; /* Ridotta la dimensione delle icone */
+    font-size: 30px;
 }
 
-.nav-link.active i,
+.nav-link.active i
+{
+    color: #d75a3d;
+    transform: scale(1.1); /* Leggero ingrandimento al passaggio del mouse */
+}
 .nav-link:hover i {
     color: #d75a3d;
     transform: scale(1.1); /* Leggero ingrandimento al passaggio del mouse */
+    filter: drop-shadow( 0 0 10px rgba(215, 90, 61, 0.5));
 }
 
 .nav-link span {
